@@ -57,6 +57,10 @@ func (p *Plugin) ExecuteCommand(_ *plugin.Context, args *model.CommandArgs) (*mo
 		FileIds:   []string{fileInfo.Id},
 	}
 	if _, appErr := p.API.CreatePost(post); appErr != nil {
+		// The upload above succeeded, so fileInfo is now orphaned: no post
+		// owns it. There is no compensating action available — the plugin
+		// API's file surface is UploadFile, GetFile, GetFileInfo,
+		// GetFileInfos, and GetFileLink, none of which can delete a file.
 		p.API.LogError("meme post failed", "template", name, "err", appErr.Error())
 		return ephemeral("I uploaded that meme but couldn't post it. Try again?"), nil
 	}
