@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          # Read from go.mod rather than pinning a version here, so the two
+          # can never drift apart.
+          go-version-file: go.mod
+
+      - name: Test
+        run: make test
+
+      - name: Build bundle
+        run: make dist
+
+      # The whole point of this job: a missing-LICENSE bug shipped in a
+      # published release because no machine ever inspected the tarball's
+      # contents. Fail loudly, and name exactly what's absent.
+      - name: Verify bundle contents
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          bundle=$(ls dist/*.tar.gz)
+          echo "Inspecting ${bundle}"
+          contents=$(tar -tzf "${bundle}")
+          echo "${contents}"
+
+          required=(
+            "plugin.json"
+            "LICENSE"
+            "NOTICE"
+            "server/dist/plugin-linux-amd64"
+          )
+
+          missing=()
+          for member in "${required[@]}"; do
+            if ! grep -Fq "/${member}" <<<"${contents}" && ! grep -Fxq "${member}" <<<"${contents}"; then
+              missing+=("${member}")
+            fi
+          done
+
+          if (( ${#missing[@]} )); then
+            echo "::error::Bundle ${bundle} is missing required member(s): ${missing[*]}"
+            exit 1
+          fi
+
+          echo "Bundle contains all required members: ${required[*]}"
