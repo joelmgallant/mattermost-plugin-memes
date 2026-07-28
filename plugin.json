@@ -4,7 +4,7 @@
     "description": "Renders memes from a /meme slash command and posts them as file attachments, so they display on mobile as well as on web and desktop.",
     "homepage_url": "https://github.com/joelmgallant/mattermost-plugin-memes",
     "support_url": "https://github.com/joelmgallant/mattermost-plugin-memes/issues",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "min_server_version": "9.0.0",
     "server": {
         "executables": {
