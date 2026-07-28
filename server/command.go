@@ -14,12 +14,20 @@ import (
 const memeCommand = "meme"
 
 // availableMemes returns every template name and alias, sorted, so the help
-// listing and the autocomplete agree on ordering.
+// listing and the autocomplete agree on ordering. Some templates list their
+// own name among their aliases, so entries are deduplicated before sorting.
 func availableMemes() []string {
-	var names []string
+	seen := make(map[string]struct{})
 	for name, metadata := range memelibrary.Memes() {
+		seen[name] = struct{}{}
+		for _, alias := range metadata.Aliases {
+			seen[alias] = struct{}{}
+		}
+	}
+
+	names := make([]string, 0, len(seen))
+	for name := range seen {
 		names = append(names, name)
-		names = append(names, metadata.Aliases...)
 	}
 	sort.Strings(names)
 	return names

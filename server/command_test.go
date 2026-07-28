@@ -21,7 +21,10 @@ func TestMemeCommandData(t *testing.T) {
 	assert.Equal(t, "meme", command.Trigger)
 	assert.True(t, command.AutoComplete)
 	require.NotNil(t, command.AutocompleteData)
-	assert.Len(t, command.AutocompleteData.SubCommands, len(availableMemes()))
+	// Pinned to the literal count rather than len(availableMemes()): asserting
+	// against the same call the implementation uses is circular, and the
+	// literal also locks in the alias-dedupe fix (99 unique names, not 101).
+	assert.Len(t, command.AutocompleteData.SubCommands, 99)
 }
 
 // The help text must not embed an image: this build serves no HTTP routes, so
