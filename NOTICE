@@ -1,0 +1,18 @@
+Mattermost Memes Plugin
+Copyright (c) 2018-2022 Mattermost, Inc. and contributors
+
+This product includes software developed at Mattermost
+(https://github.com/mattermost-community/mattermost-plugin-memes),
+licensed under the Apache License, Version 2.0.
+
+Modifications in this distribution:
+
+  - Memes are delivered as uploaded file attachments rather than as a
+    markdown image referencing a plugin-served URL, so that they render on
+    the Mattermost mobile clients.
+  - The HTTP handler that rendered templates on demand has been removed. It
+    performed no authentication.
+  - Asset loading uses //go:embed in place of a generated go-bindata blob.
+  - The plugin targets github.com/mattermost/mattermost/server/public in
+    place of github.com/mattermost/mattermost-server/v5.
+  - Command errors are reported as ephemeral messages rather than AppErrors.
