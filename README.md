@@ -18,8 +18,8 @@ bare link when a post carries no image metadata, and a plugin returning a
 on iOS or Android. That is upstream issue #41, open since 2020.
 
 This build renders the meme, uploads it with the file API, and attaches it to the
-post. Attachments carry their own dimensions and take the same path as any
-uploaded photo, so they render on every client.
+post. Attachments carry their own dimensions and need no post metadata, so a meme
+renders wherever an ordinary uploaded photo does.
 
 Two things follow from the change:
 
