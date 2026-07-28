@@ -4,6 +4,7 @@ go 1.26.5
 
 require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
+	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/image v0.44.0
 	gopkg.in/yaml.v2 v2.4.0
