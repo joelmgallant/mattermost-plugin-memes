@@ -2,7 +2,7 @@
 
 A rebuild of [mattermost-community/mattermost-plugin-memes](https://github.com/mattermost-community/mattermost-plugin-memes)
 that posts memes as **file attachments** instead of markdown image URLs, so they
-render on the mobile apps.
+render on the mobile apps (verified on iOS; Android uses the same attachment path).
 
 ```
 /meme brace-yourselves "brace yourself." "memes are coming."
@@ -56,7 +56,7 @@ go run ./server -out demo.jpg 'memes. memes everywhere'
 | | Upstream | This build |
 |---|---|---|
 | Delivery | Markdown image → plugin URL | Uploaded file attachment |
-| Mobile | Does not render | Renders |
+| Mobile | Does not render | Renders (verified on iOS) |
 | HTTP routes | One, unauthenticated | None |
 | Assets | 7.9 MB go-bindata blob | `//go:embed`, 2.1 MB raw |
 | SDK | `mattermost-server/v5` | `mattermost/server/public` |
