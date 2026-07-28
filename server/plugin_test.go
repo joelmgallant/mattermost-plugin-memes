@@ -70,9 +70,10 @@ func TestExecuteCommandUploadsAndPosts(t *testing.T) {
 
 func TestExecuteCommandUploadFailureIsEphemeral(t *testing.T) {
 	api := &plugintest.API{}
+	defer api.AssertExpectations(t)
 	api.On("UploadFile", mock.Anything, mock.Anything, mock.Anything).
 		Return(nil, model.NewAppError("UploadFile", "boom", nil, "", 500))
-	api.On("LogError", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Maybe()
+	api.On("LogError", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Once()
 
 	p := &Plugin{}
 	p.SetAPI(api)
@@ -83,7 +84,7 @@ func TestExecuteCommandUploadFailureIsEphemeral(t *testing.T) {
 	})
 	require.Nil(t, appErr)
 	assert.Equal(t, model.CommandResponseTypeEphemeral, response.ResponseType)
-	assert.NotEmpty(t, response.Text)
+	assert.Equal(t, "I rendered that meme but couldn't upload it. Try again?", response.Text)
 }
 
 // httpServer is the exact shape Mattermost dispatches plugin HTTP requests to.
@@ -93,6 +94,10 @@ func TestExecuteCommandUploadFailureIsEphemeral(t *testing.T) {
 type httpServer interface {
 	ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request)
 }
+
+// If this stops compiling, the real hook signature moved and the negative
+// assertion below has gone vacuous.
+var _ httpServer = (plugin.Hooks)(nil)
 
 // The entire point of the rebuild's security half: no HTTP surface to leave
 // unauthenticated. If someone reintroduces a route handler, this fails.
