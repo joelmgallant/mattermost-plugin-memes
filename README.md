@@ -27,7 +27,7 @@ Two things follow from the change:
   which left an unauthenticated on-demand image renderer exposed to the internet.
   This build registers no routes at all.
 - **Memes are real files.** They appear in the channel's file list and in search,
-  and cost roughly 50–150 KB each.
+  and cost roughly 20–100 KB each (median ~50 KB).
 
 ## Install
 
@@ -60,7 +60,7 @@ go run ./server -out demo.jpg 'memes. memes everywhere'
 | HTTP routes | One, unauthenticated | None |
 | Assets | 7.9 MB go-bindata blob | `//go:embed`, 2.1 MB raw |
 | SDK | `mattermost-server/v5` | `mattermost/server/public` |
-| Bundle | 34 MB, three architectures | ~8.6 MB, linux-amd64 |
+| Bundle | 34 MB, three architectures | ~9.0 MB, linux-amd64 |
 | Unknown meme | `AppError` | Ephemeral message |
 
 ## Licence and attribution
